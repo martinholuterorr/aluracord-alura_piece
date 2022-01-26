@@ -1,36 +1,7 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
+import React from 'react';
+import { useRouter } from 'next/router';
 import appConfig from '../config.json';
-
-function GlobalStyle() {
-    return (
-        <style global jsx>{`
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            body {
-                @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
-                font-family:'Open Sans'; sans-serif;
-            }
-            
-            /* App fit Height */ 
-            html, body, #__next {
-                min-height: 100vh;
-                display: flex;
-                flex: 1;
-            }
-            #__next {
-                flex: 1;
-            }
-            #__next > * {
-                flex: 1;
-            }
-            /* ./App fit Height */
-        `}</style>
-    )
-}
 
 function Titulo(props) {
     const Tag = props.tag || 'h1';
@@ -65,11 +36,12 @@ export default HomePage
 */
 
 export default function PaginaInicial() {
-    const username = 'martinholuterorr';
-
+    //const username = 'martinholuterorr';
+    const [username, setUsername] = React.useState('martinholuterorr');
+    const roteamento = useRouter();
+    
     return (
         <>
-            <GlobalStyle />
             <Box
                 styleSheet={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -91,11 +63,17 @@ export default function PaginaInicial() {
                         borderRadius: '5px', padding: '32px', margin: '16px',
                         boxShadow: '0 2px 10px 0 rgb(0 0 0 / 20%)',
                         backgroundColor: appConfig.theme.colors.neutrals[700],
+
                     }}
                 >
                     {/* Formulário */}
                     <Box
                         as="form"
+                        onSubmit={function (event) {
+                            event.preventDefault();
+                            console.log('Alguém submeteu o form');
+                            roteamento.push('/chat');
+                        }}
                         styleSheet={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                             width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -106,7 +84,29 @@ export default function PaginaInicial() {
                             Aluracord - Alura Piece
                         </Text>
 
+                        {/*
+                        <input
+                            type="text"
+                            value={username} 
+                            onChange={function handler(event) {
+                                console.log("Usuário digitou");
+                                //Onde está o valor
+                                const valor = event.target.value;
+                                //Troca o valor da variável através do React e avisa quem precisa
+                                setUsername(valor);
+                            }}    
+                        />
+                        */}
+
                         <TextField
+                            value={username}
+                            onChange={function handler(event) {
+                                console.log("Usuário digitou");
+                                //Onde está o valor
+                                const valor = event.target.value;
+                                //Troca o valor da variável através do React e avisa quem precisa
+                                setUsername(valor);
+                            }}
                             fullWidth
                             textFieldColors={{
                                 neutral: {
@@ -121,6 +121,7 @@ export default function PaginaInicial() {
                             type='submit'
                             label='Entrar'
                             fullWidth
+                            disabled={username.length < 3}
                             buttonColors={{
                                 contrastColor: appConfig.theme.colors.neutrals["000"],
                                 mainColor: appConfig.theme.colors.primary[500],
