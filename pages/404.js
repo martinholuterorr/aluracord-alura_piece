@@ -4,7 +4,8 @@ export default function Custom404() {
     return (
         <Box
             styleSheet={{
-                display: 'flex', flexDirection: 'column', alignItems: 'center'
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                backgroundColor: '#FEFEFE'
             }}
         >
             <Text
