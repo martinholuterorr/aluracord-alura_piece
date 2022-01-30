@@ -1,25 +1,38 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js';
+
+const ANON_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzQ2MDc4OSwiZXhwIjoxOTU5MDM2Nzg5fQ.2fAW4L68FOCzSOWkX4GmVlUZ60RChWErde71VcL0aOE';
+const SUPABASE_URL = 'https://emmxkwjuadiptxqvbgan.supabase.co';
+const supabaseClient = createClient(SUPABASE_URL, ANON_SUPABASE_KEY);
 
 export default function ChatPage() {
-    // Sua lógica vai aqui
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
-    // ./Sua lógica vai aqui
+
+    React.useEffect(() => {
+        supabaseClient.from('mensagens').select('*').order('id', {ascending: false}).then(({ data }) => {
+            setListaDeMensagens(data);
+        }, []);
+    })
 
     function handleNovaMensagem(novaMensagem) {
         if (novaMensagem == '') return;
 
         const mensagem = {
-            id: listaDeMensagens.length + 1,
+            //id: listaDeMensagens.length + 1,
             de: 'martinholuterorr',
             texto: novaMensagem,
         };
-        setListaDeMensagens([
-            mensagem,
-            ...listaDeMensagens,
-        ]);
+
+        supabaseClient.from('mensagens').insert([mensagem]).then(({ data }) => {
+            setListaDeMensagens([
+                data[0],
+                ...listaDeMensagens,
+            ]);
+        });
+
         setMensagem('');
     }
 
@@ -82,8 +95,8 @@ export default function ChatPage() {
                     <Box
                         as="form"
                         styleSheet={{
-                            display: 'flex',
                             alignItems: 'center',
+                            display: 'flex',
                         }}
                     >
                         <TextField
@@ -162,11 +175,11 @@ function MessageList(props) {
         <Box
             tag="ul"
             styleSheet={{
-                overflowY: 'scroll',
                 display: 'flex',
-                flexDirection: 'column-reverse',
-                flex: 1,
                 color: appConfig.theme.colors.neutrals["000"],
+                flex: 1,
+                flexDirection: 'column-reverse',
+                overflowY: 'scroll',
                 marginBottom: '16px',
             }}
         >
@@ -218,11 +231,11 @@ function MessageList(props) {
                             <Button
                                 label='x'
                                 styleSheet={{
+                                    backgroundColor: '#C83E4D',
                                     borderRadius: '100%',
                                     fontSize: '8px',
-                                    padding: '1px 4px',
                                     marginLeft: '93%',
-                                    backgroundColor: '#C83E4D',
+                                    padding: '1px 4px',
                                     hover: {
                                         backgroundColor: '#CE505F',
                                     },
