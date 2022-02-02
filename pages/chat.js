@@ -9,6 +9,7 @@ const ANON_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5v
 const SUPABASE_URL = 'https://emmxkwjuadiptxqvbgan.supabase.co';
 const supabaseClient = createClient(SUPABASE_URL, ANON_SUPABASE_KEY);
 
+
 function escutaMensagensEmTempoReal(adicionaMensagem) {
     return supabaseClient
         .from('mensagens')
@@ -108,11 +109,6 @@ export default function ChatPage() {
 
                     <MessageList
                         mensagens={listaDeMensagens}
-                        onDelete={(id) => {
-                            setListaDeMensagens(listaDeMensagens.filter((element) => {
-                                return element.id !== id
-                            }))
-                        }}
                     />
                     {/*listaDeMensagens.map((mensagemAtual) => {
                         return (
@@ -264,30 +260,14 @@ function MessageList(props) {
                             >
                                 {(new Date().toLocaleDateString())}
                             </Text>
-                            <Button
-                                label='x'
-                                styleSheet={{
-                                    backgroundColor: '#C83E4D',
-                                    borderRadius: '100%',
-                                    fontSize: '8px',
-                                    marginLeft: '93%',
-                                    padding: '1px 4px',
-                                    hover: {
-                                        backgroundColor: '#CE505F',
-                                    },
-                                    focus: {
-                                        backgroundColor: '#CE505F',
-                                    }
-                                }}
-                                onClick={() => {
-                                    props.onDelete(mensagem.id)
-
-                                }}
-                            />
                         </Box>
                         {mensagem.texto.startsWith(':sticker:')
                             ? (
-                                <Image src={mensagem.texto.replace(':sticker:', '')} />
+                                <Image src={mensagem.texto.replace(':sticker:', '')}
+                                    styleSheet={{
+                                        maxWidth: '200px',
+                                    }}
+                                />
                             ) : (
                                 mensagem.texto
                             )}

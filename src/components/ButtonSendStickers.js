@@ -27,7 +27,7 @@ export function ButtonSendSticker(props) {
                     filter: isOpen ? 'grayscale(0)' : 'grayscale(1)',
                     hover: {
                         filter: 'grayscale(0)',
-                    }
+                    },
                 }}
                 label="😋"
                 onClick={() => setOpenState(!isOpen)}
@@ -68,7 +68,7 @@ export function ButtonSendSticker(props) {
                             justifyContent: 'space-between',
                             flex: 1,
                             paddingTop: '16px',
-                            overflow: 'scroll',
+                            overflowY: 'scroll',
                         }}
                     >
                         {appConfig.stickers.map((sticker) => (
